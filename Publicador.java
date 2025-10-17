@@ -1,3 +1,3 @@
 public interface Publicador {
-    <T extends Event> void publish(T evento);
+    <T extends Event> void publicar(T evento) throws InterruptedException;
 }

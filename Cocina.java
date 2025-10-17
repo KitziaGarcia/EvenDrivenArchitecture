@@ -6,11 +6,6 @@ public class Cocina implements Suscriptor <PedidoRealizadoEvent>, Publicador {
     }
 
     @Override
-    public <T extends Event> void publish(T evento) {
-
-    }
-
-    @Override
     public void onEvent(PedidoRealizadoEvent evento) throws InterruptedException {
         Thread.sleep(500);
         System.out.println("[Cocina] Pedido recibido en Mesa " + evento.getIdMesa());
@@ -20,13 +15,14 @@ public class Cocina implements Suscriptor <PedidoRealizadoEvent>, Publicador {
             if (item.equalsIgnoreCase("hamburguesa") || item.equalsIgnoreCase("orden de pollo")) {
                 Thread.sleep(500);
                 System.out.println("[Cocina] Preparando " + item + " para la Mesa " + evento.getIdMesa());
-
                 Thread.sleep(5000);
-
-                // Publicar ComidaPreparadaEvent
-                ComidaPreparadaEvent comida = new ComidaPreparadaEvent(evento.getIdMesa(), item);
-                eventBus.publicar(comida);
+                publicar(new ComidaPreparadaEvent(evento.getIdPedido(), item));
             }
         }
+    }
+
+    @Override
+    public <T extends Event> void publicar(T evento) throws InterruptedException {
+        eventBus.publicar(evento);
     }
 }
